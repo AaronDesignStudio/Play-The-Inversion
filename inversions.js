@@ -1,6 +1,9 @@
 // Inversions data for Play the Inversion
 // All triads in root position, first inversion, and second inversion
 
+// Note names array for compatibility with pitch detection
+const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
 const INVERSION_TYPES = {
     ROOT: 'Root Position',
     FIRST: 'First Inversion',
@@ -158,6 +161,7 @@ function getRandomInversion() {
 
 // Export for use in other modules
 const Inversions = {
+    NOTES,
     INVERSION_TYPES,
     CHORD_TYPES,
     generateAllInversions,

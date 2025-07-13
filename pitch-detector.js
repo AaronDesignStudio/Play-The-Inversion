@@ -113,7 +113,7 @@ class PitchDetector {
             const note = this.frequencyToNote(pitchData.pitch);
             const now = Date.now();
             
-            if (note && pitchData.confidence > 0.8 && (note !== this.lastDetectedNote || now - this.lastDetectionTime > 300)) {
+            if (note !== null && pitchData.confidence > 0.8 && (note !== this.lastDetectedNote || now - this.lastDetectionTime > 300)) {
                 this.lastDetectedNote = note;
                 this.lastDetectionTime = now;
                 
@@ -280,7 +280,8 @@ class PitchDetector {
         
         // Only return notes within reasonable range
         if (octave >= 2 && octave <= 7) {
-            return window.ChordData.NOTES[noteWithinOctave];
+            // Return note as a number (0-11) for Play the Inversion
+            return noteWithinOctave;
         }
         
         return null;
