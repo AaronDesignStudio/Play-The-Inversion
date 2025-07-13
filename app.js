@@ -238,7 +238,7 @@ class App {
     
     // Pitch detection methods
     initPitchDetector() {
-        this.pitchDetector.on('noteDetected', (note) => {
+        this.pitchDetector.onNoteDetected((note) => {
             if (document.getElementById('listenToPiano').checked) {
                 this.game.handleExternalNote(note);
             }
@@ -247,16 +247,29 @@ class App {
     
     async startListening() {
         try {
-            await this.pitchDetector.start();
+            // Initialize pitch detector if not already done
+            if (!this.pitchDetector.audioContext) {
+                await this.pitchDetector.init();
+            }
+            await this.pitchDetector.startListening();
         } catch (error) {
             console.error('Failed to start pitch detection:', error);
-            alert('Could not access microphone. Please check your permissions.');
+            
+            // More specific error messages
+            if (error.name === 'NotAllowedError') {
+                alert('Microphone access denied. Please allow microphone access in your browser settings and reload the page.');
+            } else if (error.name === 'NotFoundError') {
+                alert('No microphone found. Please connect a microphone and try again.');
+            } else {
+                alert('Could not access microphone. Error: ' + error.message);
+            }
+            
             document.getElementById('listenToPiano').checked = false;
         }
     }
     
     stopListening() {
-        this.pitchDetector.stop();
+        this.pitchDetector.stopListening();
     }
 }
 
